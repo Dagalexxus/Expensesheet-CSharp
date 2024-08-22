@@ -60,5 +60,19 @@ namespace api.Controllers{
             _context.SaveChanges();
             return Ok(transactionModel.toTransactionDTO());
         }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete([FromRoute] int id){
+            Transaction? transactionModel = _context.Transaction.Find(id);
+
+            if (transactionModel == null){
+                return NotFound();
+            }
+
+            _context.Transaction.Remove(transactionModel);
+            _context.SaveChanges();
+            return NoContent();
+        }
     }
 }

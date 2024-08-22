@@ -1,6 +1,5 @@
-
-using System.Transactions;
 using api.Data;
+using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers{
@@ -15,7 +14,9 @@ namespace api.Controllers{
 
         [HttpGet]
         public IActionResult GetAll(){
-            List<api.Models.Transaction> transactions = _context.Transaction.ToList();
+            List<api.Dtos.Transaction.TransactionDTO> transactions = _context.Transaction.ToList()
+                                                                        .Select(t => t.toTransactionDTO())
+                                                                        .ToList();
 
             return Ok(transactions);
         }

@@ -3,7 +3,6 @@ using api.Data;
 using api.Mappers;
 using api.Dtos.Transaction;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace api.Controllers{
     [Route("api/[Controller]")]
@@ -41,6 +40,25 @@ namespace api.Controllers{
             _context.Transaction.Add(transactionModel);
             _context.SaveChanges();
             return CreatedAtAction(nameof(GetById), new { id = transactionModel.Id}, transactionModel.toTransactionDTO());
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateTransactionRequestDto updateDto){
+            Transaction? transactionModel = _context.Transaction.Find(id);
+
+            if (transactionModel == null){
+                return NotFound();
+            }
+
+            transactionModel.Amount = updateDto.Amount;
+            transactionModel.Category = updateDto.Category;
+            transactionModel.Comment = updateDto.Comment;
+            transactionModel.PaymentProvider = updateDto.PaymentProvider;
+            transactionModel.userID = updateDto.userID;
+
+            _context.SaveChanges();
+            return Ok(transactionModel.toTransactionDTO());
         }
     }
 }

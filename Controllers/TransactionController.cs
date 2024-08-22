@@ -1,6 +1,9 @@
+using api.Models;
 using api.Data;
 using api.Mappers;
+using api.Dtos.Transaction;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace api.Controllers{
     [Route("api/[Controller]")]
@@ -29,7 +32,15 @@ namespace api.Controllers{
                 return NotFound();
             }
              
-            return Ok(transaction);
+            return Ok(transaction.toTransactionDTO());
+        }
+
+        [HttpPost]
+        public IActionResult Insert([FromBody] InsertTransactionRequestDto transactionDTO){
+            Transaction transactionModel = transactionDTO.ToTransactionFromInsertDto();
+            _context.Transaction.Add(transactionModel);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(GetById), new { id = transactionModel.Id}, transactionModel.toTransactionDTO());
         }
     }
 }

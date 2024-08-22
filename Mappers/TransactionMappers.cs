@@ -13,5 +13,15 @@ namespace api.Mappers{
                 Comment = transactionModel.Comment
             };
         }
+
+        public static Transaction ToTransactionFromInsertDto(this InsertTransactionRequestDto insertDTO){
+            return new Transaction{
+                userID = insertDTO.userID,
+                PaymentProvider = insertDTO.PaymentProvider,
+                Category = insertDTO.Category,
+                Amount = insertDTO.Amount,
+                Comment = insertDTO.Comment
+            };
+        }
     }
 }

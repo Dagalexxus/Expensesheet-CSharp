@@ -3,6 +3,7 @@ using api.Data;
 using api.Mappers;
 using api.Dtos.Transaction;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers{
     [Route("api/[Controller]")]
@@ -15,17 +16,18 @@ namespace api.Controllers{
         }
 
         [HttpGet]
-        public IActionResult GetAll(){
-            List<api.Dtos.Transaction.TransactionDTO> transactions = _context.Transaction.ToList()
-                                                                        .Select(t => t.toTransactionDTO())
-                                                                        .ToList();
+        public async Task<IActionResult> GetAll(){
+            List<Transaction> transactions = await _context.Transaction.ToListAsync();
 
-            return Ok(transactions);
+            List<TransactionDTO> transactionDTOs = transactions.Select(t => t.toTransactionDTO())
+                                                            .ToList();
+
+            return Ok(transactionDTOs);
         }
 
         [HttpGet("{Id}")]
-        public IActionResult GetById([FromRoute] int id){
-            api.Models.Transaction? transaction = _context.Transaction.Find(id);
+        public async  Task<IActionResult> GetById([FromRoute] int id){
+            api.Models.Transaction? transaction = await _context.Transaction.FindAsync(id);
 
             if (transaction == null){
                 return NotFound();
@@ -35,17 +37,17 @@ namespace api.Controllers{
         }
 
         [HttpPost]
-        public IActionResult Insert([FromBody] InsertTransactionRequestDto transactionDTO){
+        public async Task<IActionResult> Insert([FromBody] InsertTransactionRequestDto transactionDTO){
             Transaction transactionModel = transactionDTO.ToTransactionFromInsertDto();
-            _context.Transaction.Add(transactionModel);
-            _context.SaveChanges();
+            await _context.Transaction.AddAsync(transactionModel);
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = transactionModel.Id}, transactionModel.toTransactionDTO());
         }
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] UpdateTransactionRequestDto updateDto){
-            Transaction? transactionModel = _context.Transaction.Find(id);
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateTransactionRequestDto updateDto){
+            Transaction? transactionModel = await _context.Transaction.FindAsync(id);
 
             if (transactionModel == null){
                 return NotFound();
@@ -57,21 +59,21 @@ namespace api.Controllers{
             transactionModel.PaymentProvider = updateDto.PaymentProvider;
             transactionModel.userID = updateDto.userID;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(transactionModel.toTransactionDTO());
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult Delete([FromRoute] int id){
-            Transaction? transactionModel = _context.Transaction.Find(id);
+        public async  Task<IActionResult> Delete([FromRoute] int id){
+            Transaction? transactionModel = await _context.Transaction.FindAsync(id);
 
             if (transactionModel == null){
                 return NotFound();
             }
 
             _context.Transaction.Remove(transactionModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return NoContent();
         }
     }

@@ -7,6 +7,9 @@ namespace api.Dtos.Transaction{
         public int userID {get; set;}
 
         [Required]
+        public DateOnly date {get; set;}
+
+        [Required]
         [PermittedValues(["Amex","Mastercard","Visa"])]
         public string PaymentProvider {get; set;} = string.Empty;
 

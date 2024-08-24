@@ -6,7 +6,7 @@ namespace api.Models{
     public class Transaction{
         [Key]
         public int Id {get; set;}
-        public DateTime date {get; set;} = DateTime.Today;
+        public DateOnly date {get; set;}
         public int userID {get; set;}
         public string PaymentProvider {get; set;} = string.Empty;
         public string BankType{get; set;} = string.Empty; //which bank?

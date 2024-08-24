@@ -40,7 +40,21 @@ namespace api.Repository{
                 transactions = transactions.Where(t => t.BankType.Equals(query.BankType));
             }
 
-            return await transactions.ToListAsync();
+            if(!string.IsNullOrWhiteSpace(query.SortBy)){
+                if(query.SortBy.Equals("date", StringComparison.OrdinalIgnoreCase)){
+                    transactions = query.IsDescending ? transactions.OrderByDescending(t => t.date) : transactions.OrderBy(t => t.date);
+                }
+                else if (query.SortBy.Equals("paymentprovider", StringComparison.OrdinalIgnoreCase)){
+                    transactions = query.IsDescending ? transactions.OrderByDescending(t => t.PaymentProvider) : transactions.OrderBy(t => t.PaymentProvider);
+                }
+                else if (query.SortBy.Equals("banktype", StringComparison.OrdinalIgnoreCase)){
+                    transactions = query.IsDescending ? transactions.OrderByDescending(t => t.BankType) : transactions.OrderBy(t => t.BankType);
+                }
+            }
+
+            int skip = (query.PageNumber - 1) * query.PageSize;
+
+            return await transactions.Skip(skip).Take(query.PageSize).ToListAsync();
         }
 
         public async Task<Transaction?> GetByIdAsync(int id)

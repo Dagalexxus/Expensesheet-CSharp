@@ -8,6 +8,7 @@ namespace api.Mappers{
                 Id = transactionModel.Id,
                 date = transactionModel.date,
                 PaymentProvider = transactionModel.PaymentProvider,
+                BankType = transactionModel.BankType,
                 Category = transactionModel.Category,
                 Amount = transactionModel.Amount,
                 Comment = transactionModel.Comment
@@ -18,6 +19,7 @@ namespace api.Mappers{
             return new Transaction{
                 userID = insertDTO.userID,
                 PaymentProvider = insertDTO.PaymentProvider,
+                BankType = insertDTO.BankType,
                 Category = insertDTO.Category,
                 Amount = insertDTO.Amount,
                 Comment = insertDTO.Comment

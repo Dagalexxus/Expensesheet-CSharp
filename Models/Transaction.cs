@@ -6,9 +6,10 @@ namespace api.Models{
     public class Transaction{
         [Key]
         public int Id {get; set;}
-        public DateTime date {get; set;} = DateTime.Now;
+        public DateTime date {get; set;} = DateTime.Today;
         public int userID {get; set;}
         public string PaymentProvider {get; set;} = string.Empty;
+        public string BankType{get; set;} = string.Empty; //which bank?
         public string Category {get; set;} = string.Empty;
 
         [Column(TypeName = "decimal(18, 2)")] 

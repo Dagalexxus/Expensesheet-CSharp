@@ -12,6 +12,10 @@ namespace api.Dtos.Transaction{
 
         [Required]
         [MaxLength(60)]
+        public string BankType {get; set;} = string.Empty;
+
+        [Required]
+        [MaxLength(60)]
         public string Category {get; set;} = string.Empty;
 
         [Required]

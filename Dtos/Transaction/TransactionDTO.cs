@@ -6,6 +6,7 @@ namespace api.Dtos.Transaction{
 
         //remove user id for testing purposes
         public string PaymentProvider {get; set;} = string.Empty;
+        public string BankType{get; set;} = string.Empty;
         public string Category {get; set;} = string.Empty;
         public decimal Amount {get; set;}
 

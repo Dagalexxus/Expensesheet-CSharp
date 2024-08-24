@@ -19,7 +19,7 @@ namespace api.Controllers{
             if (!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
-            List<Transaction> transactions = await _transactionRepository.GetAllAsync();
+            List<Transaction> transactions = await _transactionRepository.GetAllAsync(query);
 
             List<TransactionDTO> transactionDTOs = transactions.Select(t => t.toTransactionDTO())
                                                             .ToList();

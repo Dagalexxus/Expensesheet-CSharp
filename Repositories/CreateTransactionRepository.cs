@@ -1,4 +1,5 @@
 
+using api.Controllers;
 using api.Data;
 using api.Dtos.Transaction;
 using api.Interfaces;
@@ -27,9 +28,19 @@ namespace api.Repository{
             return transactionModel;
         }
 
-        public async Task<List<Transaction>> GetAllAsync()
+        public async Task<List<Transaction>> GetAllAsync(QueryObject query)
         {
-            return await _context.Transaction.ToListAsync();
+            IQueryable<Transaction> transactions = _context.Transaction.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.PaymentProvider)){
+                transactions = transactions.Where(t => t.PaymentProvider.Equals(query.PaymentProvider));
+            }
+
+            if(!string.IsNullOrWhiteSpace(query.BankType)){
+                transactions = transactions.Where(t => t.BankType.Equals(query.BankType));
+            }
+
+            return await transactions.ToListAsync();
         }
 
         public async Task<Transaction?> GetByIdAsync(int id)

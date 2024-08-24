@@ -1,8 +1,8 @@
 
 namespace api.Controllers{
     public class QueryObject{
-        public string? PaymentProvider {get; set;}
+        public string? PaymentProvider {get; set;} = null;
 
-        public string? PaymentType{get; set;}
+        public string? BankType{get; set;} = null;
     }
 }

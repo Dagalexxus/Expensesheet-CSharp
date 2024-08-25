@@ -9,6 +9,7 @@ namespace api.Data{
         }
 
         public DbSet<Transaction> Transaction {get; set;}
+        public DbSet<User> Users {get; set;}
 
     }
 }

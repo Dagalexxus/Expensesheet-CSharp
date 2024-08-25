@@ -7,6 +7,8 @@ namespace api.Models{
         [Key]
         public int Id {get; set;}
         public DateOnly date {get; set;}
+
+        [ForeignKey("User")]
         public int userID {get; set;}
         public string PaymentProvider {get; set;} = string.Empty;
         public string BankType{get; set;} = string.Empty; //which bank?

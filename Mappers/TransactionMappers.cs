@@ -5,7 +5,6 @@ namespace api.Mappers{
     public static class TransactionMapper{
         public static TransactionDTO toTransactionDTO(this Transaction transactionModel){
             return new TransactionDTO{
-                Id = transactionModel.Id,
                 date = transactionModel.date,
                 PaymentProvider = transactionModel.PaymentProvider,
                 BankType = transactionModel.BankType,

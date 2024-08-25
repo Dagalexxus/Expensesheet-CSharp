@@ -1,7 +1,6 @@
 
 namespace api.Dtos.Transaction{
     public class TransactionDTO{
-        public int Id {get; set;}
         public DateOnly date {get; set;}
 
         //remove user id for testing purposes

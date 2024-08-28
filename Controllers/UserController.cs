@@ -5,6 +5,8 @@ using api.Models;
 using api.Mappers;
 using api.Helpers;
 using api.Data;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers{
     [Route("api/[Controller]")]
@@ -30,6 +32,27 @@ namespace api.Controllers{
             _context.SaveChanges();
 
             return Created();
+        }
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> LoginUser([FromBody] LoginUserDto loginUser){
+            
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
+            User? toLogin = await _context.Users.FirstOrDefaultAsync(u => u.username == loginUser.username);
+
+            if (toLogin == null){
+                return NoContent();
+            }
+
+            if (!Passwords.passwordCheck(loginUser.passwordHash, toLogin.passwordHash, Convert.FromHexString(toLogin.salt))){
+                return Unauthorized();
+            }
+  
+            return Ok();
         }
     }
 }

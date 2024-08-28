@@ -1,0 +1,2 @@
+- Refactor the user contorller to include repository pattern and create the repository and the interface for it. 
+- expand for user to be able to manage their accounts more

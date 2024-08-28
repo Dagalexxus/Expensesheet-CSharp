@@ -3,6 +3,7 @@ using api.Mappers;
 using api.Dtos.Transaction;
 using Microsoft.AspNetCore.Mvc;
 using api.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace api.Controllers{
     [Route("api/[Controller]")]
@@ -15,6 +16,7 @@ namespace api.Controllers{
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query){
             if (!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -28,6 +30,7 @@ namespace api.Controllers{
         }
 
         [HttpGet("{Id:int}")]
+        [Authorize]
         public async  Task<IActionResult> GetById([FromRoute] int id){
             if (!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -43,6 +46,7 @@ namespace api.Controllers{
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Insert([FromBody] InsertTransactionRequestDto transactionDTO){
             if (!ModelState.IsValid){
                     return BadRequest(ModelState);
@@ -54,6 +58,7 @@ namespace api.Controllers{
 
         [HttpPut]
         [Route("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateTransactionRequestDto updateDto){
             if (!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -69,6 +74,7 @@ namespace api.Controllers{
 
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize]
         public async  Task<IActionResult> Delete([FromRoute] int id){
             if (!ModelState.IsValid){
                 return BadRequest(ModelState);

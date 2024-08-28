@@ -9,12 +9,15 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers{
+
     [Route("api/[Controller]")]
     [ApiController]
     public class UserController : ControllerBase {
+        private readonly IConfiguration _configuration;
         private readonly ApplicationDBContext _context;
-        public UserController(ApplicationDBContext context){
+        public UserController(ApplicationDBContext context, IConfiguration configuration){
             _context = context;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -51,8 +54,10 @@ namespace api.Controllers{
             if (!Passwords.passwordCheck(loginUser.passwordHash, toLogin.passwordHash, Convert.FromHexString(toLogin.salt))){
                 return Unauthorized();
             }
-  
-            return Ok();
+            
+            string webToken = Passwords.createToken(toLogin, _configuration);
+
+            return Ok(webToken);
         }
     }
 }

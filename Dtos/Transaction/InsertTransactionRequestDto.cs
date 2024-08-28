@@ -4,9 +4,6 @@ using System.ComponentModel.DataAnnotations;
 namespace api.Dtos.Transaction{
     public class InsertTransactionRequestDto{
         [Required]
-        public int userID {get; set;}
-
-        [Required]
         public DateOnly date {get; set;}
 
         [Required]

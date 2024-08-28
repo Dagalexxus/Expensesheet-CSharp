@@ -1,0 +1,10 @@
+Hello
+[aud, localhost]
+[iss, localhost]
+[exp, 1724864769]
+[name, Dagster]
+[sub, 4]
+[email, hello@dev.net]
+[role, user]
+[iat, 1724857569]
+[nbf, 1724857569]

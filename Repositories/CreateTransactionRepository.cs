@@ -14,9 +14,9 @@ namespace api.Repository{
             _context = dBContext;
         }
 
-        public async Task<Transaction?> DeleteAsync(int id)
+        public async Task<Transaction?> DeleteAsync(int id, int userID)
         {
-            Transaction? transactionModel = await _context.Transaction.FindAsync(id);
+            Transaction? transactionModel = await _context.Transaction.FirstOrDefaultAsync(t => t.Id == id && t.userID == userID);
 
             if (transactionModel == null){
                 return null;
@@ -28,9 +28,9 @@ namespace api.Repository{
             return transactionModel;
         }
 
-        public async Task<List<Transaction>> GetAllAsync(QueryObject query)
+        public async Task<List<Transaction>> GetAllAsync(QueryObject query, int userID)
         {
-            IQueryable<Transaction> transactions = _context.Transaction.AsQueryable();
+            IQueryable<Transaction> transactions = _context.Transaction.Where(u => u.userID == userID).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query.PaymentProvider)){
                 transactions = transactions.Where(t => t.PaymentProvider.Equals(query.PaymentProvider));
@@ -57,9 +57,9 @@ namespace api.Repository{
             return await transactions.Skip(skip).Take(query.PageSize).ToListAsync();
         }
 
-        public async Task<Transaction?> GetByIdAsync(int id)
+        public async Task<Transaction?> GetByIdAsync(int id, int userID)
         {
-            return await _context.Transaction.FindAsync(id);
+            return await _context.Transaction.FirstOrDefaultAsync(t => t.Id == id && t.userID == userID);
         }
 
         public async Task<Transaction> InsertAsync(Transaction transaction)
@@ -69,9 +69,9 @@ namespace api.Repository{
             return transaction;        
         }
 
-        public async Task<Transaction?> UpdateAsync(int id, UpdateTransactionRequestDto transactionDto)
+        public async Task<Transaction?> UpdateAsync(int id, UpdateTransactionRequestDto transactionDto, int userID)
         {
-            Transaction? transaction = await _context.Transaction.FindAsync(id);
+            Transaction? transaction = await _context.Transaction.FirstOrDefaultAsync(t => t.Id == id && t.userID == userID);
 
             if (transaction == null){
                 return null;

@@ -4,6 +4,7 @@ using System.Text;
 using api.Models;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.JsonWebTokens;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace api.Helpers{
     public static class Passwords{
@@ -52,6 +53,28 @@ namespace api.Helpers{
 
             
             return new JsonWebTokenHandler().CreateToken(tokenDescriptor); 
+        }
+
+        public static async Task<User> decodeToken(string token, IConfiguration configuration){
+            JsonWebTokenHandler handler = new JsonWebTokenHandler();
+            TokenValidationResult decoded = await handler.ValidateTokenAsync(token, new TokenValidationParameters{
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = configuration.GetSection("Password:Issuer").Value,
+                ValidAudience = configuration.GetSection("Password:Audience").Value,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("Password:Tokensecret").Value))
+            });
+
+            Dictionary<string, object> claims = (Dictionary<string, object>) decoded.Claims;
+            User toReturn = new User();
+
+            toReturn.username = (string) claims["name"];
+            toReturn.userEmail = (string) claims["email"];
+            toReturn.id = Convert.ToInt32(claims["sub"]);
+
+            return toReturn;
         }
   }
 }

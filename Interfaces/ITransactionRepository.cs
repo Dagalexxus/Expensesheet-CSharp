@@ -5,10 +5,10 @@ using api.Models;
 
 namespace api.Interfaces{
     public interface ITransactionRepository{
-        Task<List<Transaction>> GetAllAsync(QueryObject query);
-        Task<Transaction?> GetByIdAsync(int id);
+        Task<List<Transaction>> GetAllAsync(QueryObject query, int userID);
+        Task<Transaction?> GetByIdAsync(int id, int userID);
         Task<Transaction> InsertAsync(Transaction transaction);
-        Task<Transaction?> UpdateAsync(int id, UpdateTransactionRequestDto transactionDto);
-        Task<Transaction?> DeleteAsync(int id);
+        Task<Transaction?> UpdateAsync(int id, UpdateTransactionRequestDto transactionDto, int userID);
+        Task<Transaction?> DeleteAsync(int id, int userID);
     }
 }
